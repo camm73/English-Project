@@ -11,45 +11,42 @@ import java.awt.image.DataBufferInt;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.SwingConstants;
 
-import cam.entities.people.Commoner;
-import cam.entities.people.Player;
 import cam.graphics.Screen;
-import cam.graphics.Sprite;
 import cam.input.Keys;
-import cam.level.Level;
-import cam.level.MainLevel;
-import cam.level.Map;
-import cam.level.RandomLevel;
-import cam.level.tile.Tile;
+import cam.level1.entities.people.Commoner;
+import cam.level1.entities.people.Player;
+import cam.level1.level.Level;
+import cam.level1.level.Map;
 
 public class Game extends Canvas implements Runnable {
 
+	private static final long serialVersionUID = 2946129672622533874L;
 	private Thread thread;
 	private JFrame frame;
 	private boolean running = false;
 
 	public static final int WIDTH = 300;
-	public static final int HEIGHT = 220;
+	public static final int HEIGHT = 200;
 	public static final int SCALE = 3;
 	public static final String title = "TEMPORARY ENGLISH PROJECT TITLE";
+	public static int levelNumber = 1;
 
 	private Screen screen;
-	private Keys keys;
+	public Keys keys;
 	private Level level;
 	private Map map;
 	private int fps;
 	public static Player player;
 	public boolean first = true;
 	
-	private int commonNum = 12;
-	public static int distributions;
+	private int commonNum = 60;
+	public static int distributions = 0;
 	public static String commonerText = "";
 	public static String commonerText2 = "";
 
-	public BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	public int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+	public BufferedImage mainLevelImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+	public int[] pixels = ((DataBufferInt) mainLevelImage.getRaster().getDataBuffer()).getData();
 
 	public Game() {
 		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
@@ -65,8 +62,6 @@ public class Game extends Canvas implements Runnable {
 		player = new Player(5, 20, keys);
 		player.init(level);
 		addKeyListener(keys);
-		
-		distributions = commonNum;
 	}
 
 	public synchronized void start() {
@@ -98,7 +93,7 @@ public class Game extends Canvas implements Runnable {
 	public void addEntity(){
 		for(int i = 0; i < commonNum; i++){
 			Random random = new Random();
-			level.add(new Commoner(i*10 + 14, 20, random.nextInt(5), false));
+			level.add(new Commoner(this, i*2 + 25, 20, random.nextInt(7), false)); //TODO may need to change the spawning distances
 		}
 	}
 
@@ -122,18 +117,36 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		g.setColor(Color.black);
-		g.fillRect(0, HEIGHT*SCALE - 60, WIDTH*SCALE, 60);
-		g.setColor(Color.red);
-		g.setFont(new Font("Arial", Font.BOLD, 18));
-		g.drawString(new String(String.valueOf(fps)), 15, 25);
-		g.drawString("Statements left: " + distributions, (WIDTH*SCALE)/2, 25);
-		g.setFont(new Font("Arial", Font.BOLD, 16));
-		g.drawString(commonerText, 10, (HEIGHT*SCALE) - 35);
-		g.drawString(commonerText2, 10, (HEIGHT*SCALE) - 15);
 		
-		map.render(g, level);
+		if(levelNumber == 1){
+		
+			g.drawImage(mainLevelImage, 0, 0, getWidth(), getHeight(), null);
+			g.setColor(Color.black);
+			g.fillRect(0, HEIGHT*SCALE - 60, WIDTH*SCALE, 60); //TODO replace this with a nice looking plank of wood or something of the sort
+			g.setColor(Color.red);
+			g.setFont(new Font("Arial", Font.BOLD, 18));
+			g.drawString(new String(String.valueOf(fps)), 15, 25);
+			g.drawString("Pamphlets distributed: " + distributions, (WIDTH*SCALE)/2, 25);
+			g.setFont(new Font("Arial", Font.BOLD, 16));
+			g.setColor(Color.WHITE);
+			g.drawString(commonerText, 10, (HEIGHT*SCALE) - 35);
+			g.drawString(commonerText2, 10, (HEIGHT*SCALE) - 15);
+			
+			//TODO need to add some sort of time limit which will be drawn on the top of the screen
+			
+			map.render(g, level);
+		}else if(levelNumber == 2){
+			for(int i = 0; i < pixels.length;i++){
+				pixels[i] = 0;
+			}
+			g.drawImage(mainLevelImage, 0, 0, getWidth(), getHeight(), null);
+			g.setColor(Color.black);
+			g.fillRect(0, HEIGHT*SCALE - 60, WIDTH*SCALE, 60);
+			g.setColor(Color.red);
+			g.setFont(new Font("Arial", Font.BOLD, 18));
+			g.drawString(new String(String.valueOf(fps)), 15, 25);
+			g.drawString("Pamphlets distributed: " + distributions, (WIDTH*SCALE)/2, 25);
+		}
 		
 		g.dispose();
 		bs.show();

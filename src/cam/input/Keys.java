@@ -3,10 +3,13 @@ package cam.input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import cam.Game;
+
 public class Keys implements KeyListener{
 
 	public boolean[] key = new boolean[65536];
 	public static boolean up, down, left, right, escape, interact;
+	public boolean letGo = false;
 	
 	
 	
@@ -17,6 +20,9 @@ public class Keys implements KeyListener{
 		right = key[KeyEvent.VK_D];
 		escape = key[KeyEvent.VK_ESCAPE];
 		interact = key[KeyEvent.VK_X];
+		if(key[KeyEvent.VK_7]){
+			Game.levelNumber = 2;
+		}
 	}
 	
 	
@@ -28,6 +34,10 @@ public class Keys implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		key[e.getKeyCode()] = false;
+		
+		if(!interact){
+			letGo = false;
+		}
 	}
 
 	@Override

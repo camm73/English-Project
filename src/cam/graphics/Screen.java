@@ -2,7 +2,8 @@ package cam.graphics;
 
 import java.util.Random;
 
-import cam.level.tile.Tile;
+import cam.level1.level.tile.Tile;
+
 
 public class Screen {
 
