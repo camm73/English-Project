@@ -76,19 +76,21 @@ public class Commoner extends People {
 		double distance = Math.sqrt(Math.pow(x - Game.player.getX(), 2) - Math.pow(y - Game.player.getY(), 2));
 		double radius = 12;
 
-		switch(Game.player.getDir()){
-		case 0:
-			dir = 0;
-			break;
-		case 1:
-			dir = 3;
-			break;
-		case 2:
-			dir = 2;
-			break;
-		case 3:
-			dir = 1;
-			break;
+		if(distance < radius){
+			switch(Game.player.getDir()){
+			case 0:
+				dir = 0;
+				break;
+			case 1:
+				dir = 3;
+				break;
+			case 2:
+				dir = 2;
+				break;
+			case 3:
+				dir = 1;
+				break;
+			}
 		}
 		
 		

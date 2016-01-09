@@ -18,6 +18,7 @@ import cam.level1.entities.people.Commoner;
 import cam.level1.entities.people.Player;
 import cam.level1.level.Level;
 import cam.level1.level.Map;
+import cam.level2.SecondMain;
 
 public class Game extends Canvas implements Runnable {
 
@@ -87,6 +88,12 @@ public class Game extends Canvas implements Runnable {
 		if(first){
 			addEntity();
 			first = false;
+		}
+		
+		if(levelNumber == 2){
+			SecondMain main = new SecondMain();
+			frame.dispose();
+			stop();
 		}
 	}
 	
