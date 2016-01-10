@@ -217,7 +217,7 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void startMusic(){
-		music.play();
+		music.loop();
 	}
 
 }

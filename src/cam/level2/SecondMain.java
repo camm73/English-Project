@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -22,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cam.Game;
-import javazoom.jl.player.advanced.AdvancedPlayer;
+import cam.Sound;
 
 public class SecondMain {
 
@@ -44,10 +45,13 @@ public class SecondMain {
 	public boolean showBook = false;
 	public boolean showCalling = false;
 	public boolean makingHashmap = true;
-
+	
 	public JButton phoneButton = new JButton("Make a call");
+	public JButton backButton = new JButton("Back");
 	public HashMap<String, JLabel> nameLabelLeft = new HashMap<String, JLabel>();
 	public HashMap<String, JButton> callButtonsLeft = new HashMap<String, JButton>();
+	public HashMap<String, Sound> sounds = new HashMap<String, Sound>();
+	public ArrayList<Sound> playingSounds = new ArrayList<Sound>();
 
 	public JPanel leftPage = new JPanel(new GridBagLayout());
 	public JPanel callingPage = new JPanel(new GridBagLayout());
@@ -57,6 +61,7 @@ public class SecondMain {
 	
 	public Thread thread;
 	public boolean running = false;
+	public boolean soundsExist = false;
 
 	public SecondMain() {
 		frame = new JFrame();
@@ -154,6 +159,27 @@ public class SecondMain {
 		distLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 		distLabel.setText("Distributions: "+ distributions + "             ");
 		distLabel.repaint();
+		
+		if(soundsExist){
+			for(int i = 0; i < sounds.size(); i++){
+				if(sounds.get(String.valueOf(i)).playing){
+					if(!playingSounds.contains(sounds.get(String.valueOf(i)))){
+						playingSounds.add(sounds.get(String.valueOf(i)));
+					}
+				}else{
+					if(playingSounds.contains(sounds.get(String.valueOf(i)))){
+						playingSounds.remove(sounds.get(String.valueOf(i)));
+					}
+				}
+			}
+			
+			if(playingSounds.size() > 0){
+				backButton.setEnabled(false);
+			}else{
+				backButton.setEnabled(true);
+			}
+		}
+	
 	}
 
 	public void loadHashmaps() {
@@ -176,6 +202,11 @@ public class SecondMain {
 			callButtonsLeft.put(String.valueOf(i), new JButton("Call"));
 		}
 		
+		for(int i = 0;i < 4; i++){
+			sounds.put(String.valueOf(i), new Sound("/convo" + String.valueOf(i+1) + ".wav"));
+		}
+		soundsExist = true;
+		
 		for(int i = 0; i < callButtonsLeft.size(); i++){
 			JButton btn = callButtonsLeft.get(String.valueOf(i));
 			btn.setForeground(new Color(0x228B22));
@@ -186,12 +217,16 @@ public class SecondMain {
 					showBook = false;
 					showCalling = true;
 					callerNameLabel.setText("Speaking with: " + nameLabelLeft.get(String.valueOf(tmp)).getText());
+					sounds.get(String.valueOf(tmp)).play();
+					sounds.get(String.valueOf(tmp)).playing = true;
 					distLabel.setForeground(Color.black);
+					btn.setEnabled(false);
 					callingPage.repaint();
 					callingPage.revalidate();
 					leftPage.setVisible(false);
 					callingPage.setVisible(true);
 					mainPanel.repaint();
+					backButton.setEnabled(false);
 				}
 			});
 		}
@@ -251,10 +286,29 @@ public class SecondMain {
 		
 		public void getCallingPage(){
 			//TODO add name, call time, back button to this panel
+			Insets callingInsets = callingPage.getInsets();
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
 			c.gridy = 0;
 			c.weighty = 1.0;
+			
+			Dimension backSize = backButton.getPreferredSize();
+			backButton.setBounds(callingInsets.left, callingInsets.top, backSize.width, backSize.height);
+			backButton.setForeground(Color.WHITE);
+			callingPage.add(backButton, c);
+			backButton.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					showCalling = false;
+					showBook = true;
+					distLabel.setForeground(Color.white);
+					leftPage.setVisible(true);
+					callingPage.setVisible(false);
+					mainPanel.repaint();
+					mainPanel.revalidate();
+				}
+			});
+			
+			c.gridy++;
 			c.anchor = GridBagConstraints.NORTH;
 			callingPage.add(callerNameLabel, c);
 		}
