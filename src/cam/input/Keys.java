@@ -9,15 +9,23 @@ public class Keys implements KeyListener{
 
 	public boolean[] key = new boolean[65536];
 	public static boolean up, down, left, right, escape, interact;
+	public boolean disabled = false;
 	public boolean letGo = false;
 	
 	
 	
 	public void update(){
-		up = key[KeyEvent.VK_W];
-		down = key[KeyEvent.VK_S];
-		left = key[KeyEvent.VK_A];
-		right = key[KeyEvent.VK_D];
+		if(!disabled){
+			up = key[KeyEvent.VK_W];
+			down = key[KeyEvent.VK_S];
+			left = key[KeyEvent.VK_A];
+			right = key[KeyEvent.VK_D];
+		}else{
+			up = false;
+			down = false;
+			left = false;
+			right = false;
+		}
 		escape = key[KeyEvent.VK_ESCAPE];
 		interact = key[KeyEvent.VK_X];
 		if(key[KeyEvent.VK_7]){

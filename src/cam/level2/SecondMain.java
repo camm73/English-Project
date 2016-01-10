@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cam.Game;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 
 public class SecondMain {
 
@@ -35,6 +36,8 @@ public class SecondMain {
 	public JLabel openBookLabel;
 	public JLabel oldDeskLabel;
 	public JLabel callBackgroundLabel;
+	public JLabel callerNameLabel = new JLabel();
+	public JLabel distLabel = new JLabel();
 	public Insets insets;
 
 	public boolean showDesk = true;
@@ -49,9 +52,15 @@ public class SecondMain {
 	public JPanel leftPage = new JPanel(new GridBagLayout());
 	public JPanel callingPage = new JPanel(new GridBagLayout());
 	public JPanel mainPanel;
+	
+	public int distributions = 0;
+	
+	public Thread thread;
+	public boolean running = false;
 
 	public SecondMain() {
 		frame = new JFrame();
+		start();
 		loadImages();
 		loadHashmaps();
 
@@ -70,6 +79,37 @@ public class SecondMain {
 		frame.setLocationRelativeTo(null);
 		frame.add(mainPanel);
 		frame.setVisible(true);
+	}
+	
+	
+	double delta = 0;
+	long prev;
+	public synchronized void start(){
+		running = true;
+		prev = System.nanoTime();
+		final double limit = 1000000000.0 / 60.0;
+		thread = new Thread(new Runnable(){
+			public void run(){
+				while(running){
+					long now = System.nanoTime();
+					delta += ((now-prev) / limit);
+					prev = now;
+					if(delta >= 1){
+						update();
+						delta--;
+					}
+				}
+			}
+		});
+		thread.start();
+	}
+	
+	public synchronized void stop(){
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void getLeftPage() {
@@ -108,6 +148,13 @@ public class SecondMain {
 		callBackgroundLabel = new JLabel(new ImageIcon(callBackgroundImage));
 
 	}
+	
+	public void update(){
+		distributions+=30;
+		distLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		distLabel.setText("Distributions: "+ distributions + "             ");
+		distLabel.repaint();
+	}
 
 	public void loadHashmaps() {
 		nameLabelLeft.put("0", new JLabel("Phillip Abel"));
@@ -117,6 +164,7 @@ public class SecondMain {
 		nameLabelLeft.put("4", new JLabel("Joffrey Sudworth"));
 		nameLabelLeft.put("5", new JLabel("Nikolas Schmitt"));
 		nameLabelLeft.put("6", new JLabel("Alfred Montagne"));
+		nameLabelLeft.put("7", new JLabel("Kyle Wittenberg"));
 
 		for (int i = 0; i < nameLabelLeft.size(); i++) {
 			JLabel label = nameLabelLeft.get(String.valueOf(i));
@@ -132,10 +180,15 @@ public class SecondMain {
 			JButton btn = callButtonsLeft.get(String.valueOf(i));
 			btn.setForeground(new Color(0x228B22));
 			btn.setOpaque(false);
+			int tmp = i;
 			btn.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					showBook = false;
 					showCalling = true;
+					callerNameLabel.setText("Speaking with: " + nameLabelLeft.get(String.valueOf(tmp)).getText());
+					distLabel.setForeground(Color.black);
+					callingPage.repaint();
+					callingPage.revalidate();
 					leftPage.setVisible(false);
 					callingPage.setVisible(true);
 					mainPanel.repaint();
@@ -151,6 +204,8 @@ public class SecondMain {
 
 		public MainPanel() {
 			setLayout(null);
+			callerNameLabel.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+			callerNameLabel.setForeground(Color.black);
 			content();
 		}
 
@@ -164,7 +219,7 @@ public class SecondMain {
 			getLeftPage();
 			add(leftPage);
 			
-			Rectangle callingBound = new Rectangle(100, 60, 500, 300);
+			Rectangle callingBound = new Rectangle(194, 60, 500, 300);
 			callingPage.setBounds(callingBound);
 			callingPage.setVisible(false);
 			callingPage.setOpaque(false);
@@ -185,10 +240,23 @@ public class SecondMain {
 					repaint();
 				}
 			});
+			
+			Dimension distSize = new Dimension(600, 100);
+			distLabel.setBounds(insets.left + 600, insets.top + 15, distSize.width, distSize.height);
+			distLabel.setForeground(Color.white);
+			add(distLabel);
+			
+			
 		}
 		
 		public void getCallingPage(){
 			//TODO add name, call time, back button to this panel
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 0;
+			c.weighty = 1.0;
+			c.anchor = GridBagConstraints.NORTH;
+			callingPage.add(callerNameLabel, c);
 		}
 
 		public void paintComponent(Graphics g) {

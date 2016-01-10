@@ -8,6 +8,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -19,6 +22,8 @@ import cam.level1.entities.people.Player;
 import cam.level1.level.Level;
 import cam.level1.level.Map;
 import cam.level2.SecondMain;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 
 public class Game extends Canvas implements Runnable {
 
@@ -46,6 +51,8 @@ public class Game extends Canvas implements Runnable {
 	public static String commonerText = "";
 	public static String commonerText2 = "";
 
+	public Sound music = new Sound("/levelSong.wav");
+
 	public BufferedImage mainLevelImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	public int[] pixels = ((DataBufferInt) mainLevelImage.getRaster().getDataBuffer()).getData();
 
@@ -63,6 +70,8 @@ public class Game extends Canvas implements Runnable {
 		player = new Player(5, 20, keys);
 		player.init(level);
 		addKeyListener(keys);
+
+		startMusic();
 	}
 
 	public synchronized void start() {
@@ -74,6 +83,7 @@ public class Game extends Canvas implements Runnable {
 	public synchronized void stop() {
 		running = false;
 		try {
+			music.stop();
 			thread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -194,6 +204,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void begin() {
+		
 		frame.setTitle(title);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -203,6 +214,10 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 
 		start();
+	}
+	
+	public void startMusic(){
+		music.play();
 	}
 
 }

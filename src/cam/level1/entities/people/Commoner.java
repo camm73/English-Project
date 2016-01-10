@@ -16,6 +16,8 @@ public class Commoner extends People {
 	private Keys keys;
 	long timer;
 	int xa = 0, ya = 0;
+	public int talkingTime = 3;
+	public int talkingTimeLeft;
 
 	private int time = 0;
 
@@ -39,6 +41,7 @@ public class Commoner extends People {
 		player = Game.player;
 	}
 
+	long now;
 	public void update() {
 		time++;
 		checkInteraction();
@@ -72,9 +75,11 @@ public class Commoner extends People {
 		}
 	}
 
+	long prev;
 	private void checkInteraction() {
 		double distance = Math.sqrt(Math.pow(x - Game.player.getX(), 2) - Math.pow(y - Game.player.getY(), 2));
 		double radius = 12;
+		
 
 		if(distance < radius){
 			switch(Game.player.getDir()){
@@ -96,8 +101,8 @@ public class Commoner extends People {
 		
 		if (distance < (radius)) {
 			interacting = true;
-			if (Keys.interact) {
-
+			if (Keys.interact && !keys.disabled) {
+				
 				switch (id) {
 				case 0:
 					if (!received && !keys.letGo) {
@@ -105,6 +110,8 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 				case 1:
@@ -113,6 +120,8 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 				case 2:
@@ -121,6 +130,8 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 				case 3:
@@ -129,6 +140,8 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 				case 4:
@@ -137,6 +150,8 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 					
@@ -146,6 +161,8 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 				case 6:
@@ -154,6 +171,28 @@ public class Commoner extends People {
 						Game.distributions++;
 						received = true;
 						keys.letGo = true;
+						
+						pauseControls();
+					}
+					break;
+				case 7:
+					if(!received && !keys.letGo){
+						say("You're absolutely right. We need to break free of this tyrannical government", 1);
+						Game.distributions++;
+						received = true;
+						keys.letGo = true;
+						
+						pauseControls();
+					}
+					break;
+				case 8:
+					if(!received && !keys.letGo){
+						say("We're need more men like you if we are ever gonna leave England's rule.", 1);
+						Game.distributions++;
+						received = true;
+						keys.letGo = true;
+						
+						pauseControls();
 					}
 					break;
 				
@@ -164,9 +203,25 @@ public class Commoner extends People {
 		}
 
 	}
+	
+	public void pauseControls(){
+		prev = System.currentTimeMillis();
+		Thread tmpThread = new Thread(new Runnable(){
+			public void run(){
+				while(((now - prev)/1000) < talkingTime){
+					talkingTimeLeft = talkingTime - (int) ((now - prev) / 1000);
+					keys.disabled = true;
+					System.out.println("timeLeft: " + talkingTimeLeft);
+				}
+				keys.disabled = false;
+			}
+		});
+		tmpThread.start();
+	}
 
 	public void render(Screen screen) {
-
+		now = System.currentTimeMillis();
+		
 		int xx = x - 16;
 		int yy = y - 16;
 
