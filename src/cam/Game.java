@@ -35,7 +35,7 @@ public class Game extends Canvas implements Runnable {
 	public static final int WIDTH = 300;
 	public static final int HEIGHT = 200;
 	public static final int SCALE = 3;
-	public static final String title = "TEMPORARY ENGLISH PROJECT TITLE";
+	public static final String title = "Time Crisis -- By Cameron Miller and Brian Harrison";
 	public static int levelNumber = 1;
 
 	private Screen screen;

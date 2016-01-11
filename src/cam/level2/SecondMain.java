@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 
 import cam.Game;
 import cam.Sound;
+import cam.level3.ThirdMain;
 
 public class SecondMain {
 
@@ -48,6 +49,7 @@ public class SecondMain {
 	
 	public JButton phoneButton = new JButton("Make a call");
 	public JButton backButton = new JButton("Back");
+	public JButton nextLevel = new JButton("Next Level");
 	public HashMap<String, JLabel> nameLabelLeft = new HashMap<String, JLabel>();
 	public HashMap<String, JButton> callButtonsLeft = new HashMap<String, JButton>();
 	public HashMap<String, Sound> sounds = new HashMap<String, Sound>();
@@ -58,6 +60,8 @@ public class SecondMain {
 	public JPanel mainPanel;
 	
 	public int distributions = 0;
+	public int multiplier = 0;
+	public int callsMade = 0;
 	
 	public Thread thread;
 	public boolean running = false;
@@ -154,8 +158,16 @@ public class SecondMain {
 
 	}
 	
+	double time = 0;
 	public void update(){
-		distributions+=30;
+		time++;
+		int secs = 11;
+		if(callsMade < 8){
+			if((time % (secs*60)) == 0){
+				distributions += callsMade + (multiplier*distributions)/3;
+			}
+		}
+		
 		distLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 		distLabel.setText("Distributions: "+ distributions + "             ");
 		distLabel.repaint();
@@ -178,6 +190,10 @@ public class SecondMain {
 			}else{
 				backButton.setEnabled(true);
 			}
+		}
+		
+		if(callsMade == 8){
+			nextLevel.setVisible(true);
 		}
 	
 	}
@@ -202,11 +218,10 @@ public class SecondMain {
 			callButtonsLeft.put(String.valueOf(i), new JButton("Call"));
 		}
 		
-		for(int i = 0;i < 4; i++){
+		for(int i = 0;i < 8; i++){
 			sounds.put(String.valueOf(i), new Sound("/convo" + String.valueOf(i+1) + ".wav"));
 		}
 		soundsExist = true;
-		
 		for(int i = 0; i < callButtonsLeft.size(); i++){
 			JButton btn = callButtonsLeft.get(String.valueOf(i));
 			btn.setForeground(new Color(0x228B22));
@@ -282,6 +297,17 @@ public class SecondMain {
 			add(distLabel);
 			
 			
+			Dimension nextSize = nextLevel.getPreferredSize();
+			nextLevel.setBounds(insets.left + 400, insets.top + 300, nextSize.width, nextSize.height);
+			nextLevel.setForeground(Color.RED);
+			nextLevel.setVisible(false);
+			nextLevel.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					ThirdMain tm = new ThirdMain();
+					frame.dispose();
+				}
+			});
+			
 		}
 		
 		public void getCallingPage(){
@@ -298,6 +324,11 @@ public class SecondMain {
 			callingPage.add(backButton, c);
 			backButton.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
+					distributions++;
+					callsMade++;
+					multiplier++;
+					time = 0;
+					System.out.println("distributions: " + distributions + " callsMade: " + callsMade + " multiplier: " + multiplier);
 					showCalling = false;
 					showBook = true;
 					distLabel.setForeground(Color.white);
