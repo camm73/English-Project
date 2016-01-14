@@ -19,9 +19,9 @@ public class Menu {
 
 	private JFrame frame = new JFrame();
 	private JPanel panel = new JPanel(new GridBagLayout());
-	private JLabel title = new JLabel("Travel to Corinth");
-	private JLabel instruct = new JLabel("You will travel back in time to Corinth and ask the Corinthians");
-	private JLabel instruct2 = new JLabel("about the letters they received from Paul");
+	private JLabel title = new JLabel("Time Crisis");
+	private JLabel instruct = new JLabel("In this game you will see how modern technology would");
+	private JLabel instruct2 = new JLabel("have changed the spread of Revolutionary Literature.");
 	private JButton play = new JButton("Play");
 
 	public Menu() {

@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import cam.Game;
 import cam.Sound;
 import cam.level3.ThirdMain;
+import cam.level3.Upload;
 
 public class SecondMain {
 
@@ -46,7 +47,7 @@ public class SecondMain {
 	public boolean showBook = false;
 	public boolean showCalling = false;
 	public boolean makingHashmap = true;
-	
+
 	public JButton phoneButton = new JButton("Make a call");
 	public JButton backButton = new JButton("Back");
 	public JButton nextLevel = new JButton("Next Level");
@@ -58,11 +59,11 @@ public class SecondMain {
 	public JPanel leftPage = new JPanel(new GridBagLayout());
 	public JPanel callingPage = new JPanel(new GridBagLayout());
 	public JPanel mainPanel;
-	
+
 	public int distributions = 0;
 	public int multiplier = 0;
-	public int callsMade = 0;
-	
+	public int callsMade = 7;
+
 	public Thread thread;
 	public boolean running = false;
 	public boolean soundsExist = false;
@@ -89,21 +90,21 @@ public class SecondMain {
 		frame.add(mainPanel);
 		frame.setVisible(true);
 	}
-	
-	
+
 	double delta = 0;
 	long prev;
-	public synchronized void start(){
+
+	public synchronized void start() {
 		running = true;
 		prev = System.nanoTime();
 		final double limit = 1000000000.0 / 60.0;
-		thread = new Thread(new Runnable(){
-			public void run(){
-				while(running){
+		thread = new Thread(new Runnable() {
+			public void run() {
+				while (running) {
 					long now = System.nanoTime();
-					delta += ((now-prev) / limit);
+					delta += ((now - prev) / limit);
 					prev = now;
-					if(delta >= 1){
+					if (delta >= 1) {
 						update();
 						delta--;
 					}
@@ -112,8 +113,8 @@ public class SecondMain {
 		});
 		thread.start();
 	}
-	
-	public synchronized void stop(){
+
+	public synchronized void stop() {
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
@@ -128,14 +129,14 @@ public class SecondMain {
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.anchor = GridBagConstraints.WEST;
-		
+
 		for (int i = 0; i < nameLabelLeft.size(); i++) {
 			leftPage.add(nameLabelLeft.get(String.valueOf(i)), c);
 			c.gridy++;
 		}
 
 		c.gridx++;
-		c.gridy =0;
+		c.gridy = 0;
 		c.anchor = GridBagConstraints.EAST;
 		for (int i = 0; i < callButtonsLeft.size(); i++) {
 			leftPage.add(callButtonsLeft.get(String.valueOf(i)), c);
@@ -157,45 +158,52 @@ public class SecondMain {
 		callBackgroundLabel = new JLabel(new ImageIcon(callBackgroundImage));
 
 	}
-	
+
 	double time = 0;
-	public void update(){
+
+	public void update() {
 		time++;
 		int secs = 11;
-		if(callsMade < 8){
-			if((time % (secs*60)) == 0){
-				distributions += callsMade + (multiplier*distributions)/3;
+		if (callsMade < 8) {
+			if ((time % (secs * 60)) == 0) {
+				distributions += callsMade + (multiplier * distributions) / 3;
 			}
 		}
-		
+
 		distLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		distLabel.setText("Distributions: "+ distributions + "             ");
+		distLabel.setText("Distributions: " + distributions + "             ");
 		distLabel.repaint();
-		
-		if(soundsExist){
-			for(int i = 0; i < sounds.size(); i++){
-				if(sounds.get(String.valueOf(i)).playing){
-					if(!playingSounds.contains(sounds.get(String.valueOf(i)))){
+
+		if (soundsExist) {
+			for (int i = 0; i < sounds.size(); i++) {
+				if (sounds.get(String.valueOf(i)).playing) {
+					if (!playingSounds.contains(sounds.get(String.valueOf(i)))) {
 						playingSounds.add(sounds.get(String.valueOf(i)));
 					}
-				}else{
-					if(playingSounds.contains(sounds.get(String.valueOf(i)))){
+				} else {
+					if (playingSounds.contains(sounds.get(String.valueOf(i)))) {
 						playingSounds.remove(sounds.get(String.valueOf(i)));
 					}
 				}
 			}
-			
-			if(playingSounds.size() > 0){
+
+			if (playingSounds.size() > 0) {
 				backButton.setEnabled(false);
-			}else{
+			} else {
 				backButton.setEnabled(true);
 			}
 		}
-		
-		if(callsMade == 8){
+
+		if (callsMade == 8) {
+			leftPage.setVisible(false);
+			mainPanel.setVisible(true);
+			showBook = false;
+			showDesk = true;
 			nextLevel.setVisible(true);
+			mainPanel.repaint();
+			mainPanel.revalidate();
 		}
-	
+
 	}
 
 	public void loadHashmaps() {
@@ -213,22 +221,22 @@ public class SecondMain {
 			label.setForeground(Color.black);
 			label.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
 		}
-		
-		for(int i = 0; i < nameLabelLeft.size(); i++){
+
+		for (int i = 0; i < nameLabelLeft.size(); i++) {
 			callButtonsLeft.put(String.valueOf(i), new JButton("Call"));
 		}
-		
-		for(int i = 0;i < 8; i++){
-			sounds.put(String.valueOf(i), new Sound("/convo" + String.valueOf(i+1) + ".wav"));
+
+		for (int i = 0; i < 8; i++) {
+			sounds.put(String.valueOf(i), new Sound("/convo" + String.valueOf(i + 1) + ".wav"));
 		}
 		soundsExist = true;
-		for(int i = 0; i < callButtonsLeft.size(); i++){
+		for (int i = 0; i < callButtonsLeft.size(); i++) {
 			JButton btn = callButtonsLeft.get(String.valueOf(i));
 			btn.setForeground(new Color(0x228B22));
 			btn.setOpaque(false);
 			int tmp = i;
-			btn.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
+			btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 					showBook = false;
 					showCalling = true;
 					callerNameLabel.setText("Speaking with: " + nameLabelLeft.get(String.valueOf(tmp)).getText());
@@ -245,7 +253,7 @@ public class SecondMain {
 				}
 			});
 		}
-		
+
 		makingHashmap = false;
 	}
 
@@ -268,7 +276,7 @@ public class SecondMain {
 			leftPage.setOpaque(false);
 			getLeftPage();
 			add(leftPage);
-			
+
 			Rectangle callingBound = new Rectangle(194, 60, 500, 300);
 			callingPage.setBounds(callingBound);
 			callingPage.setVisible(false);
@@ -290,40 +298,41 @@ public class SecondMain {
 					repaint();
 				}
 			});
-			
+
 			Dimension distSize = new Dimension(600, 100);
 			distLabel.setBounds(insets.left + 600, insets.top + 15, distSize.width, distSize.height);
 			distLabel.setForeground(Color.white);
 			add(distLabel);
-			
-			
+
 			Dimension nextSize = nextLevel.getPreferredSize();
 			nextLevel.setBounds(insets.left + 400, insets.top + 300, nextSize.width, nextSize.height);
 			nextLevel.setForeground(Color.RED);
 			nextLevel.setVisible(false);
-			nextLevel.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					ThirdMain tm = new ThirdMain();
+			add(nextLevel);
+			nextLevel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// ThirdMain tm = new ThirdMain();
+					Upload up = new Upload();
 					frame.dispose();
 				}
 			});
-			
+
 		}
-		
-		public void getCallingPage(){
-			//TODO add name, call time, back button to this panel
+
+		public void getCallingPage() {
+			// TODO add name, call time, back button to this panel
 			Insets callingInsets = callingPage.getInsets();
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
 			c.gridy = 0;
 			c.weighty = 1.0;
-			
+
 			Dimension backSize = backButton.getPreferredSize();
 			backButton.setBounds(callingInsets.left, callingInsets.top, backSize.width, backSize.height);
 			backButton.setForeground(Color.WHITE);
 			callingPage.add(backButton, c);
-			backButton.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
+			backButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 					distributions++;
 					callsMade++;
 					multiplier++;
@@ -338,7 +347,7 @@ public class SecondMain {
 					mainPanel.revalidate();
 				}
 			});
-			
+
 			c.gridy++;
 			c.anchor = GridBagConstraints.NORTH;
 			callingPage.add(callerNameLabel, c);
@@ -347,9 +356,9 @@ public class SecondMain {
 		public void paintComponent(Graphics g) {
 			if (showDesk) {
 				g.drawImage(oldDeskImage, 0, 0, null);
-			} else if (showBook){
+			} else if (showBook) {
 				g.drawImage(openBookImage, 0, 0, null);
-			}else if(showCalling){
+			} else if (showCalling) {
 				g.drawImage(callBackgroundImage, 0, 0, null);
 			}
 		}

@@ -7,10 +7,10 @@ import cam.level3.Upload;
 public class Start {
 	
 	public static void main(String[] args){
-		//Menu menu = new Menu();
+		Menu menu = new Menu();
 		//SecondMain main = new SecondMain();
 		//ThirdMain tm = new ThirdMain();
-		Upload up = new Upload();
+		//Upload up = new Upload();
 	}
 
 }

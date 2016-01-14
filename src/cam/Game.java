@@ -47,6 +47,7 @@ public class Game extends Canvas implements Runnable {
 	public boolean first = true;
 	
 	private int commonNum = 60;
+	public int levelTime = 4;
 	public static int distributions = 0;
 	public static String commonerText = "";
 	public static String commonerText2 = "";
@@ -90,7 +91,9 @@ public class Game extends Canvas implements Runnable {
 		}
 	}
 
+	int time = 0;
 	public void update() {
+		time++;
 		keys.update();
 		player.update();
 		level.update();
@@ -98,6 +101,14 @@ public class Game extends Canvas implements Runnable {
 		if(first){
 			addEntity();
 			first = false;
+		}
+		
+		if(time % 60 == 0){
+			levelTime--;
+		}
+		
+		if(levelTime == 0){
+			levelNumber = 2;
 		}
 		
 		if(levelNumber == 2){
@@ -143,13 +154,15 @@ public class Game extends Canvas implements Runnable {
 			g.setColor(Color.red);
 			g.setFont(new Font("Arial", Font.BOLD, 18));
 			g.drawString(new String(String.valueOf(fps)), 15, 25);
-			g.drawString("Pamphlets distributed: " + distributions, (WIDTH*SCALE)/2, 25);
+			g.drawString("Pamphlets distributed: " + distributions, ((WIDTH*SCALE)/2) - 20, 25);
 			g.setFont(new Font("Arial", Font.BOLD, 16));
 			g.setColor(Color.WHITE);
 			g.drawString(commonerText, 10, (HEIGHT*SCALE) - 35);
 			g.drawString(commonerText2, 10, (HEIGHT*SCALE) - 15);
+			g.setColor(Color.red);
+			g.setFont(new Font("Arial", Font.PLAIN, 20));
+			g.drawString("Time Left: " + levelTime + " secs", (WIDTH*SCALE) - 200, (HEIGHT*SCALE) - 20);
 			
-			//TODO need to add some sort of time limit which will be drawn on the top of the screen
 			
 			map.render(g, level);
 		}else if(levelNumber == 2){

@@ -273,7 +273,6 @@ public class Commoner extends People {
 				break;
 			case 1:
 				sprite = Sprite.oldman_right;
-
 				break;
 			case 2:
 				sprite = Sprite.oldman_down;
