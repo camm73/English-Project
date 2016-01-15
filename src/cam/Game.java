@@ -47,7 +47,7 @@ public class Game extends Canvas implements Runnable {
 	public boolean first = true;
 	
 	private int commonNum = 60;
-	public int levelTime = 4;
+	public int levelTime = 400;
 	public static int distributions = 0;
 	public static String commonerText = "";
 	public static String commonerText2 = "";
@@ -68,7 +68,7 @@ public class Game extends Canvas implements Runnable {
 		screen = new Screen(WIDTH, HEIGHT);
 		level = Level.main;
 		map = new Map();
-		player = new Player(5, 20, keys);
+		player = new Player(20, 60, keys);
 		player.init(level);
 		addKeyListener(keys);
 
@@ -164,7 +164,7 @@ public class Game extends Canvas implements Runnable {
 			g.drawString("Time Left: " + levelTime + " secs", (WIDTH*SCALE) - 200, (HEIGHT*SCALE) - 20);
 			
 			
-			map.render(g, level);
+			//map.render(g, level);
 		}else if(levelNumber == 2){
 			for(int i = 0; i < pixels.length;i++){
 				pixels[i] = 0;

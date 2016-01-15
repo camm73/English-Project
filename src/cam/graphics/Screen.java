@@ -1,5 +1,6 @@
 package cam.graphics;
 
+import java.awt.Color;
 import java.util.Random;
 
 import cam.level1.level.tile.Tile;
@@ -51,7 +52,12 @@ public class Screen {
 					xa = 0;
 				}
 				
-				pixels[xa + ya * width] = tile.sprite.pixels[x+y*tile.sprite.SIZE];
+				int col = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+				if(col != 0xffff00ff){
+					pixels[xa + ya * width] = col;
+				}else{
+					pixels[xa + ya * width] = new Color(0, 0, 0, 0).getRGB();
+				}
 			}
 		}
 	}

@@ -12,6 +12,7 @@ public class Sprite {
 	public static Sprite test = new Sprite(16, 0xffffffff);
 	public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.main);
 	public static Sprite stone = new Sprite(16, 1, 0, SpriteSheet.main);
+	public static Sprite sand = new Sprite(16, 10, 0, SpriteSheet.main);
 	public static Sprite wood = new Sprite(16, 2, 0, SpriteSheet.main);
 	public static Sprite water = new Sprite(16, 3, 0, SpriteSheet.main);
 	public static Sprite darkWood = new Sprite(16, 5, 0, SpriteSheet.main);
@@ -19,6 +20,7 @@ public class Sprite {
 	public static Sprite lampBottom = new Sprite(16, 7, 0, SpriteSheet.main);
 	public static Sprite lampTop = new Sprite(16, 8, 0, SpriteSheet.main);
 	public static Sprite brick = new Sprite(16, 9, 0, SpriteSheet.main);
+	public static Sprite roof = new Sprite(16, 11, 0, SpriteSheet.main);
 	
 	public static Sprite man_down = new Sprite(32, 4, 0, SpriteSheet.characters);
 	public static Sprite man_up = new Sprite(32, 7, 0, SpriteSheet.characters);

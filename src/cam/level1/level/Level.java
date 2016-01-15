@@ -136,6 +136,7 @@ public abstract class Level {
 		if(tiles[x+y*width] == Tile.col_darkWood) return Tile.darkWoodTile;
 		if(tiles[x+y*width] == Tile.col_glass) return Tile.glassTile;
 		if(tiles[x+y*width] == Tile.col_brick) return Tile.brickTile;
+		if(tiles[x+y*width] == Tile.col_roof) return Tile.roofTile;
 		
 		return Tile.voidTile;
 	}
