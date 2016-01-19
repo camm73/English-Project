@@ -24,6 +24,7 @@ public class Menu {
 	private JLabel instruct2 = new JLabel("have changed the spread of Revolutionary Literature.");
 	private JButton play = new JButton("Play");
 	private JButton about = new JButton("About");
+	private JButton levelSelect = new JButton("Select Level");
 	private JButton exit = new JButton("Exit");
 
 	public Menu() {
@@ -85,6 +86,16 @@ public class Menu {
 			public void actionPerformed(ActionEvent e){
 				frame.dispose();
 				new About();
+			}
+		});
+		
+		c.gridy++;
+		
+		panel.add(levelSelect, c);
+		levelSelect.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				frame.dispose();
+				new LevelSelect();
 			}
 		});
 		

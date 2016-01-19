@@ -165,7 +165,7 @@ public class SecondMain {
 	public void update() {
 		time++;
 		int secs = 11;
-		if (callsMade < 8) {
+		if (callsMade < 8 && callsLeft > 0) {
 			if ((time % (secs * 60)) == 0) {
 				distributions2 += callsMade + (multiplier * distributions2) / 10;
 			}
@@ -204,8 +204,8 @@ public class SecondMain {
 			mainPanel.repaint();
 			mainPanel.revalidate();
 		}
-		
-		if(callsLeft == 0){
+
+		if (callsLeft == 0) {
 			leftPage.setVisible(false);
 			mainPanel.setVisible(true);
 			showBook = false;
