@@ -167,7 +167,7 @@ public class SecondMain {
 		int secs = 11;
 		if (callsMade < 8) {
 			if ((time % (secs * 60)) == 0) {
-				distributions2 += callsMade + (multiplier * distributions2) / 12;
+				distributions2 += callsMade + (multiplier * distributions2) / 10;
 			}
 		}
 
@@ -248,7 +248,6 @@ public class SecondMain {
 			int tmp = i;
 			btn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					callsLeft--;
 					showBook = false;
 					showCalling = true;
 					callerNameLabel.setText("Speaking with: " + nameLabelLeft.get(String.valueOf(tmp)).getText());
@@ -332,7 +331,6 @@ public class SecondMain {
 		}
 
 		public void getCallingPage() {
-			// TODO add name, call time, back button to this panel
 			Insets callingInsets = callingPage.getInsets();
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
@@ -347,6 +345,7 @@ public class SecondMain {
 				public void actionPerformed(ActionEvent e) {
 					distributions2++;
 					callsMade++;
+					callsLeft--;
 					multiplier++;
 					time = 0;
 					System.out.println("distributions: " + distributions2 + " callsMade: " + callsMade + " multiplier: " + multiplier);

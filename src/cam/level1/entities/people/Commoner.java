@@ -17,10 +17,15 @@ public class Commoner extends People {
 	long timer;
 	int xa = 0, ya = 0;
 	public int talkingTime = 3;
-	public int talkingTimeLeft;
+	public static int talkingTimeLeft;
 	public boolean moving = false;
+	public Thread tmpThread;
 
 	private int time = 0;
+	
+	public Commoner(){
+		
+	}
 
 	public Commoner(Game game, int x, int y, int id, int type, boolean received) {
 		this.game = game;
@@ -450,7 +455,7 @@ public class Commoner extends People {
 	long prev;
 	public void pauseControls(){
 		prev = System.currentTimeMillis();
-		Thread tmpThread = new Thread(new Runnable(){
+		tmpThread = new Thread(new Runnable(){
 			public void run(){
 				while(((now - prev)/1000) < talkingTime){
 					talkingTimeLeft = talkingTime - (int) ((now - prev) / 1000);
@@ -461,5 +466,14 @@ public class Commoner extends People {
 			}
 		});
 		tmpThread.start();
+	}
+	
+	public synchronized void stop(){
+		try {
+			tmpThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

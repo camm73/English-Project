@@ -9,8 +9,10 @@ import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import cam.graphics.Screen;
@@ -42,6 +44,7 @@ public class Game extends Canvas implements Runnable {
 	private int fps;
 	public static Player player;
 	public boolean first = true;
+	public BufferedImage woodBar;
 	
 	private int entityNum = 60;
 	public int levelTime = 120;
@@ -60,12 +63,13 @@ public class Game extends Canvas implements Runnable {
 		setMaximumSize(size);
 		setPreferredSize(size);
 
+		loadImage();
 		frame = new JFrame(title);
 		keys = new Keys();
 		screen = new Screen(WIDTH, HEIGHT);
 		level = Level.main;
 		map = new Map();
-		player = new Player(20, 60, keys);
+		player = new Player(18, 40, keys);
 		player.init(level);
 		addKeyListener(keys);
 
@@ -129,8 +133,24 @@ public class Game extends Canvas implements Runnable {
 	public void addEntity(){
 		for(int i = 0; i < entityNum; i++){
 			Random random = new Random();
-			level.add(new Commoner(this, i*2 + 25, 20, random.nextInt(10), random.nextInt(3), false)); //TODO may need to change the spawning distances
+			if(!level.getTile(i*48, i*48).solid()){
+				level.add(new Commoner(this, i*2 + 25, 20, random.nextInt(10), random.nextInt(3), false));
+			}else{
+				int tmp = 0;
+				while(level.getTile((i*3) + tmp, (i*2) + tmp).solid()){
+					tmp+=5;
+				}
+				level.add(new Commoner(this, (i*3)+tmp, (i*2)+tmp, random.nextInt(10), random.nextInt(3), false));
+			}
 		} 
+	}
+	
+	public void loadImage(){
+		try{
+			woodBar = ImageIO.read(Game.class.getResource("/woodBar.png"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	public void render() {
@@ -144,9 +164,7 @@ public class Game extends Canvas implements Runnable {
 		int xScroll = player.x - screen.width / 2;
 		int yScroll = player.y - screen.height / 2;
 		level.render(xScroll, yScroll, screen);
-		//System.out.println(xScroll + "   " + yScroll);
 		player.render(screen);
-		//System.out.println("x: "+ player.x + " y: "+ player.y);
 		
 		for(int i = 0; i < pixels.length; i++){
 			pixels[i] = screen.pixels[i];
@@ -158,15 +176,18 @@ public class Game extends Canvas implements Runnable {
 		
 			g.drawImage(mainLevelImage, 0, 0, getWidth(), getHeight(), null);
 			g.setColor(Color.black);
-			g.fillRect(0, HEIGHT*SCALE - 60, WIDTH*SCALE, 60); //TODO replace this with a nice looking plank of wood or something of the sort
+			g.drawImage(woodBar, 0, Game.HEIGHT*SCALE-60, null);
 			g.setColor(Color.red);
 			g.setFont(new Font("Arial", Font.BOLD, 18));
 			g.drawString(new String(String.valueOf(fps)), 15, 25);
 			g.drawString("Pamphlets distributed: " + distributions1, ((WIDTH*SCALE)/2) - 20, 25);
 			g.setFont(new Font("Arial", Font.BOLD, 16));
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			g.drawString(commonerText, 10, (HEIGHT*SCALE) - 35);
 			g.drawString(commonerText2, 10, (HEIGHT*SCALE) - 15);
+			if(keys.disabled){
+				g.drawString("Time left speaking with colonist: " + Commoner.talkingTimeLeft, 240, (HEIGHT*SCALE - 15));
+			}
 			g.setColor(Color.red);
 			g.setFont(new Font("Arial", Font.PLAIN, 20));
 			g.drawString("Time Left: " + levelTime + " secs", (WIDTH*SCALE) - 200, (HEIGHT*SCALE) - 20);

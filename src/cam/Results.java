@@ -40,7 +40,7 @@ public class Results {
 		text.setLineWrap(true);
 		textScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		textScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		text.setText("Congratulations! Your scores by level were: \n \n Level 1: " + Game.distributions1 + "\n Level 2:	" + SecondMain.distributions2 + "\n Level 3: " + ThirdMain.distributions3 + "\n \n Please press the button below to return to the menu.");
+		text.setText("Congratulations! Your scores by level were: \n \n Level 1: " + Game.distributions1 + "\n Level 2: " + SecondMain.distributions2 + "\n Level 3: " + ThirdMain.distributions3 + "\n \n Please press the button below to return to the menu.");
 		panel.add(textScroll, BorderLayout.CENTER);
 		
 		panel.add(next, BorderLayout.SOUTH);
@@ -48,6 +48,9 @@ public class Results {
 			public void actionPerformed(ActionEvent e){
 				frame.dispose();
 				Menu menu = new Menu();
+				Game.distributions1 = 0;
+				SecondMain.distributions2 = 0;
+				ThirdMain.distributions3 = 0;
 			}
 		});
 	}

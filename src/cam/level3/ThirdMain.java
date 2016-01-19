@@ -16,11 +16,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import cam.Game;
 import cam.Results;
+import cam.Sound;
 
 public class ThirdMain {
 	
@@ -29,6 +31,7 @@ public class ThirdMain {
 	
 	public JFrame frame;
 	public static long distributions3 = 0;
+	public static Sound music = new Sound("/thirdLevelSong.wav");
 	
 	public ThirdMain(){
 		frame = new JFrame();
@@ -100,6 +103,7 @@ public class ThirdMain {
 			running = true;
 			thread = new Thread(this);
 			thread.start();
+			music.play();
 		}
 		
 		public synchronized void stop(){
@@ -140,9 +144,9 @@ public class ThirdMain {
 		int time = 0;
 		public void update(){
 			time++;
-			int secs = 5;
+			int secs = 7;
 			if(!done){
-				distributions3 += 1 + ((multiplier*distributions3)/3000) + (onTweet*2)/10000;
+				distributions3 += 1 + ((multiplier*distributions3)/5500) + (onTweet*2)/10000;
 			}
 			distLabel.setText("Distributions: " + distributions3);
 			if(distExists){
@@ -172,6 +176,7 @@ public class ThirdMain {
 			if(done){
 				frame.dispose();
 				new Results();
+				music.stop();
 				stop();
 			}
 		}
