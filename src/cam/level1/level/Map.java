@@ -10,8 +10,8 @@ import cam.level1.entities.Entity;
 
 public class Map extends Canvas {
 
-	int width = 210;
-	int height = 55;
+	int width = MainLevel.width;
+	int height = MainLevel.height;
 	int scale = 2;
 
 	BufferedImage map = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -49,7 +49,7 @@ public class Map extends Canvas {
 			pixels[(px + 2) + py * width] = 0xffff00;
 		}
 
-		g.drawImage(map, Game.WIDTH * Game.SCALE - width, height, width, height, null);
+		g.drawImage(map, (Game.WIDTH*Game.SCALE)- width, 0, width, height, null);
 	}
 
 }

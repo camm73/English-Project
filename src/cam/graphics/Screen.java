@@ -51,13 +51,7 @@ public class Screen {
 				if (xa <0){
 					xa = 0;
 				}
-				
-				int col = tile.sprite.pixels[x + y * tile.sprite.SIZE];
-				if(col != 0xffff00ff){
-					pixels[xa + ya * width] = col;
-				}else{
-					pixels[xa + ya * width] = new Color(0, 0, 0, 0).getRGB();
-				}
+				pixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 			}
 		}
 	}

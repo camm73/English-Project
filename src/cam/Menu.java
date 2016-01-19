@@ -23,6 +23,8 @@ public class Menu {
 	private JLabel instruct = new JLabel("In this game you will see how modern technology would");
 	private JLabel instruct2 = new JLabel("have changed the spread of Revolutionary Literature.");
 	private JButton play = new JButton("Play");
+	private JButton about = new JButton("About");
+	private JButton exit = new JButton("Exit");
 
 	public Menu() {
 		frame = new JFrame();
@@ -74,6 +76,24 @@ public class Menu {
 				Game game = new Game();
 				game.begin();
 				frame.dispose();
+			}
+		});
+		c.gridy++;
+		
+		panel.add(about, c);
+		about.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				frame.dispose();
+				new About();
+			}
+		});
+		
+		c.gridy++;
+		
+		panel.add(exit, c);
+		exit.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				System.exit(0);
 			}
 		});
 

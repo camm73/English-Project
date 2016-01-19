@@ -13,7 +13,7 @@ public class SpriteSheet {
 	public int[] pixels;
 	
 	public static SpriteSheet main = new SpriteSheet("/landscapeSheet.png", 256);
-	public static SpriteSheet characters = new SpriteSheet("/characters.png", 256);
+	public static SpriteSheet characters = new SpriteSheet("/characters.png", 512);
 	
 	public SpriteSheet(String path, int size){
 		this.path = path;

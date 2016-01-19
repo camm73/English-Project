@@ -20,13 +20,15 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import cam.Game;
+import cam.Results;
 
 public class ThirdMain {
 	
-	public final int WIDTH = Game.WIDTH*Game.SCALE;
-	public final int HEIGHT = Game.HEIGHT*Game.SCALE;
+	public final int WIDTH = 900;
+	public final int HEIGHT = 600;
 	
 	public JFrame frame;
+	public static long distributions3 = 0;
 	
 	public ThirdMain(){
 		frame = new JFrame();
@@ -46,6 +48,7 @@ public class ThirdMain {
 	
 	class ThirdPanel extends JPanel implements Runnable{
 		
+		private static final long serialVersionUID = 1998269598443270286L;
 		public Insets insets = getInsets();
 		public JPanel feedPanel = new JPanel(new GridBagLayout());
 		public JScrollPane feedScroll = new JScrollPane(feedPanel);
@@ -70,7 +73,6 @@ public class ThirdMain {
 		public JLabel washingtonLabel;
 		public JLabel coloniesLabel;
 		
-		public long distributions = 0;
 		public long multiplier = 0;
 		
 		public boolean tweetsExist = false;
@@ -140,9 +142,9 @@ public class ThirdMain {
 			time++;
 			int secs = 5;
 			if(!done){
-				distributions += 1 + ((multiplier*distributions)/3000) + (onTweet*2)/10000;
+				distributions3 += 1 + ((multiplier*distributions3)/3000) + (onTweet*2)/10000;
 			}
-			distLabel.setText("Distributions: " + distributions);
+			distLabel.setText("Distributions: " + distributions3);
 			if(distExists){
 				distLabel.repaint();
 			}
@@ -165,6 +167,12 @@ public class ThirdMain {
 			
 			if(onTweet == 8){
 				done = true;
+			}
+			
+			if(done){
+				frame.dispose();
+				new Results();
+				stop();
 			}
 		}
 		

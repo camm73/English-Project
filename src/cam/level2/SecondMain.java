@@ -29,8 +29,8 @@ import cam.level3.Upload;
 
 public class SecondMain {
 
-	public final int WIDTH = Game.WIDTH * Game.SCALE;
-	public final int HEIGHT = Game.HEIGHT * Game.SCALE;
+	public final int WIDTH = 900;
+	public final int HEIGHT = 600;
 	public JFrame frame;
 
 	public BufferedImage openBookImage;
@@ -60,9 +60,10 @@ public class SecondMain {
 	public JPanel callingPage = new JPanel(new GridBagLayout());
 	public JPanel mainPanel;
 
-	public int distributions = 0;
+	public static int distributions2 = 0;
 	public int multiplier = 0;
-	public int callsMade = 7;
+	public int callsMade = 0;
+	public int callsLeft = 4;
 
 	public Thread thread;
 	public boolean running = false;
@@ -166,12 +167,12 @@ public class SecondMain {
 		int secs = 11;
 		if (callsMade < 8) {
 			if ((time % (secs * 60)) == 0) {
-				distributions += callsMade + (multiplier * distributions) / 3;
+				distributions2 += callsMade + (multiplier * distributions2) / 12;
 			}
 		}
 
 		distLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		distLabel.setText("Distributions: " + distributions + "             ");
+		distLabel.setText("Distributions: " + distributions2 + "             ");
 		distLabel.repaint();
 
 		if (soundsExist) {
@@ -195,6 +196,16 @@ public class SecondMain {
 		}
 
 		if (callsMade == 8) {
+			leftPage.setVisible(false);
+			mainPanel.setVisible(true);
+			showBook = false;
+			showDesk = true;
+			nextLevel.setVisible(true);
+			mainPanel.repaint();
+			mainPanel.revalidate();
+		}
+		
+		if(callsLeft == 0){
 			leftPage.setVisible(false);
 			mainPanel.setVisible(true);
 			showBook = false;
@@ -237,6 +248,7 @@ public class SecondMain {
 			int tmp = i;
 			btn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					callsLeft--;
 					showBook = false;
 					showCalling = true;
 					callerNameLabel.setText("Speaking with: " + nameLabelLeft.get(String.valueOf(tmp)).getText());
@@ -333,11 +345,11 @@ public class SecondMain {
 			callingPage.add(backButton, c);
 			backButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					distributions++;
+					distributions2++;
 					callsMade++;
 					multiplier++;
 					time = 0;
-					System.out.println("distributions: " + distributions + " callsMade: " + callsMade + " multiplier: " + multiplier);
+					System.out.println("distributions: " + distributions2 + " callsMade: " + callsMade + " multiplier: " + multiplier);
 					showCalling = false;
 					showBook = true;
 					distLabel.setForeground(Color.white);

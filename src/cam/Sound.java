@@ -42,10 +42,15 @@ public class Sound implements LineListener{
 	
 	public void loop(){
 		clip.loop(15);
+		clip.addLineListener(this);
 	}
 	
 	public void stop(){
 		clip.stop();
+	}
+	
+	public boolean isPlaying(){
+		return playing;
 	}
 
 	@Override
@@ -61,5 +66,4 @@ public class Sound implements LineListener{
 			playing = false;
 		}
 	}
-
 }

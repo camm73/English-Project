@@ -11,6 +11,7 @@ public class Start {
 		//SecondMain main = new SecondMain();
 		//ThirdMain tm = new ThirdMain();
 		//Upload up = new Upload();
+		//About about = new About();
 	}
 
 }

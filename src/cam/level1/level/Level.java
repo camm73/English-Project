@@ -131,12 +131,11 @@ public abstract class Level {
 		if(tiles[x+y*width] == Tile.col_stone) return Tile.stoneTile;
 		if(tiles[x+y*width] ==Tile.col_wood) return Tile.woodTile;
 		if(tiles[x+y*width] == Tile.col_water) return Tile.waterTile;
-		if(tiles[x+y*width] == Tile.col_lampBottom) return Tile.lampBottomTile;
-		if(tiles[x+y*width] == Tile.col_lampTop) return Tile.lampTopTile;
 		if(tiles[x+y*width] == Tile.col_darkWood) return Tile.darkWoodTile;
 		if(tiles[x+y*width] == Tile.col_glass) return Tile.glassTile;
 		if(tiles[x+y*width] == Tile.col_brick) return Tile.brickTile;
 		if(tiles[x+y*width] == Tile.col_roof) return Tile.roofTile;
+		if(tiles[x+y*width] == Tile.col_sand) return Tile.sandTile;
 		
 		return Tile.voidTile;
 	}

@@ -9,8 +9,10 @@ public class Keys implements KeyListener{
 
 	public boolean[] key = new boolean[65536];
 	public static boolean up, down, left, right, escape, interact;
+	public static boolean mute;
 	public boolean disabled = false;
 	public boolean letGo = false;
+	public boolean muteLetGo = false;
 	
 	
 	
@@ -26,11 +28,9 @@ public class Keys implements KeyListener{
 			left = false;
 			right = false;
 		}
+		mute = key[KeyEvent.VK_M];
 		escape = key[KeyEvent.VK_ESCAPE];
 		interact = key[KeyEvent.VK_X];
-		if(key[KeyEvent.VK_7]){
-			Game.levelNumber = 2;
-		}
 	}
 	
 	

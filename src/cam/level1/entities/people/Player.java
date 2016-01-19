@@ -11,7 +11,7 @@ public class Player extends People{
 	private Sprite sprite;
 	private Level level;
 	private int anim = 2;
-	private int speed = 2;
+	private int speed = 3;
 	private boolean moving = false;
 
 	public Player(Keys key) {
@@ -56,59 +56,59 @@ public class Player extends People{
 
 		switch (dir) {
 		case 0:
+			sprite = Sprite.player_down;
+
+			if (moving) {
+				if (anim % 20 > 5) {
+					sprite = Sprite.player_down_1;
+				} else {
+					sprite = Sprite.player_down_2;
+				}
+			}
+			break;
+		case 1:
+			sprite = Sprite.player_right;
+
+			if (moving) {
+				if (anim % 20 > 5) {
+					sprite = Sprite.player_right_1;
+				} else {
+					sprite = Sprite.player_right;
+				}
+			}
+			break;
+		case 2:
 			sprite = Sprite.player_up;
 
-			/**if (moving) {
+			if (moving) {
 				if (anim % 20 > 5) {
 					sprite = Sprite.player_up_1;
 				} else {
 					sprite = Sprite.player_up_2;
 				}
-			}**/
-			break;
-		case 1:
-			sprite = Sprite.player_right;
-
-			/**if (moving) {
-				if (anim % 20 > 5) {
-					sprite = Sprite.player_right_1;
-				} else {
-					sprite = Sprite.player_right_2;
-				}
-			}**/
-			break;
-		case 2:
-			sprite = Sprite.player_down;
-
-			/**if (moving) {
-				if (anim % 20 > 5) {
-					sprite = Sprite.player_down_1;
-				} else {
-					sprite = Sprite.player_down_2;
-				}
-			}**/
+			}
 			break;
 		case 3:
 			sprite = Sprite.player_left;
 
-			/**if (moving) {
+			if (moving) {
 				if (anim % 20 > 5) {
 					sprite = Sprite.player_left_1;
 				} else {
-					sprite = Sprite.player_left_2;
+					sprite = Sprite.player_left;
 				}
-			}**/
+			}
 			break;
 		default:
 			sprite = Sprite.player_down;
 
-			/**if (moving) {
+			if (moving) {
 				if (anim % 20 > 5) {
 					sprite = Sprite.player_down_1;
 				} else {
 					sprite = Sprite.player_down_2;
 				}
-			}**/
+			}
 			break;
 		}
 		screen.renderPlayer(xx, yy, sprite);

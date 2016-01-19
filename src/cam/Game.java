@@ -5,25 +5,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
 import cam.graphics.Screen;
+import cam.graphics.Sprite;
 import cam.input.Keys;
 import cam.level1.entities.people.Commoner;
 import cam.level1.entities.people.Player;
 import cam.level1.level.Level;
 import cam.level1.level.Map;
 import cam.level2.SecondMain;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.advanced.AdvancedPlayer;
 
 public class Game extends Canvas implements Runnable {
 
@@ -32,9 +29,9 @@ public class Game extends Canvas implements Runnable {
 	private JFrame frame;
 	private boolean running = false;
 
-	public static final int WIDTH = 300;
-	public static final int HEIGHT = 200;
 	public static final int SCALE = 3;
+	public static final int WIDTH = 340;
+	public static final int HEIGHT = 200;
 	public static final String title = "Time Crisis -- By Cameron Miller and Brian Harrison";
 	public static int levelNumber = 1;
 
@@ -46,9 +43,9 @@ public class Game extends Canvas implements Runnable {
 	public static Player player;
 	public boolean first = true;
 	
-	private int commonNum = 60;
-	public int levelTime = 400;
-	public static int distributions = 0;
+	private int entityNum = 60;
+	public int levelTime = 120;
+	public static int distributions1 = 0;
 	public static String commonerText = "";
 	public static String commonerText2 = "";
 
@@ -98,6 +95,17 @@ public class Game extends Canvas implements Runnable {
 		player.update();
 		level.update();
 		
+		if(Keys.mute && music.playing && !keys.muteLetGo){
+			keys.muteLetGo = true;
+			music.stop();
+		}else if(Keys.mute && !music.playing && !keys.muteLetGo){
+			keys.muteLetGo = true;
+			music.loop();
+		}else if(!Keys.mute){
+			keys.muteLetGo = false;
+		}
+		
+		
 		if(first){
 			addEntity();
 			first = false;
@@ -119,10 +127,10 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void addEntity(){
-		for(int i = 0; i < commonNum; i++){
+		for(int i = 0; i < entityNum; i++){
 			Random random = new Random();
-			level.add(new Commoner(this, i*2 + 25, 20, random.nextInt(7), false)); //TODO may need to change the spawning distances
-		}
+			level.add(new Commoner(this, i*2 + 25, 20, random.nextInt(10), random.nextInt(3), false)); //TODO may need to change the spawning distances
+		} 
 	}
 
 	public void render() {
@@ -154,7 +162,7 @@ public class Game extends Canvas implements Runnable {
 			g.setColor(Color.red);
 			g.setFont(new Font("Arial", Font.BOLD, 18));
 			g.drawString(new String(String.valueOf(fps)), 15, 25);
-			g.drawString("Pamphlets distributed: " + distributions, ((WIDTH*SCALE)/2) - 20, 25);
+			g.drawString("Pamphlets distributed: " + distributions1, ((WIDTH*SCALE)/2) - 20, 25);
 			g.setFont(new Font("Arial", Font.BOLD, 16));
 			g.setColor(Color.WHITE);
 			g.drawString(commonerText, 10, (HEIGHT*SCALE) - 35);
@@ -164,7 +172,7 @@ public class Game extends Canvas implements Runnable {
 			g.drawString("Time Left: " + levelTime + " secs", (WIDTH*SCALE) - 200, (HEIGHT*SCALE) - 20);
 			
 			
-			//map.render(g, level);
+			map.render(g, level);
 		}else if(levelNumber == 2){
 			for(int i = 0; i < pixels.length;i++){
 				pixels[i] = 0;
@@ -175,7 +183,7 @@ public class Game extends Canvas implements Runnable {
 			g.setColor(Color.red);
 			g.setFont(new Font("Arial", Font.BOLD, 18));
 			g.drawString(new String(String.valueOf(fps)), 15, 25);
-			g.drawString("Pamphlets distributed: " + distributions, (WIDTH*SCALE)/2, 25);
+			g.drawString("Pamphlets distributed: " + distributions1, (WIDTH*SCALE)/2, 25);
 		}
 		
 		g.dispose();
@@ -231,6 +239,7 @@ public class Game extends Canvas implements Runnable {
 	
 	public void startMusic(){
 		music.loop();
+		music.playing = true;
 	}
 
 }

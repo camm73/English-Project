@@ -10,7 +10,7 @@ public abstract class Entity {
 	public int x, y;
 	protected Level level;
 	public int id;
-	public int gender;
+	public int type;
 	public boolean removed = false;
 	public boolean received = false;
 	protected final Random random = new Random();
@@ -52,7 +52,7 @@ public abstract class Entity {
 	}
 	
 	public int getGender(){
-		return gender;
+		return type;
 	}
 
 }
